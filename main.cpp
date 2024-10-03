@@ -13,6 +13,20 @@ void verifica_erro()
     cout << "Op��o inv�lida! Por favor, digite uma op��oo v�lida. \n";
 }
 
+void lista_assentos(char assentos[10][6]) {
+    cout << "   A B C D E F" << endl;
+    for (int i = 0; i < 10; i++) {
+        // Formatacao do numero de linha (1 a 9 com dois espa�os, 10 com um espa�o)
+        (i + 1 < 10) ? cout << i + 1 << "  " : cout << i + 1 << " ";
+
+        // Listando os assentos para cada fileira
+        for (int j = 0; j < 6; j++) {
+            cout << assentos[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
 int main()
 {
     //DECLARAR VARIAVEIS
@@ -30,6 +44,9 @@ int main()
             assentos[i][j] = 'L';
         }
     }
+
+    //LISTA ASSENTOS
+    lista_assentos(assentos);
 
     while (toupper(continuar) != 'N')
     {
