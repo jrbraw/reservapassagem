@@ -3,6 +3,7 @@
 #include <cctype>
 #include <limits>
 #include <locale.h>
+#include <typeinfo>
 
 using namespace std;
 
@@ -30,9 +31,9 @@ void lista_assentos(char assentos[10][6]) {
 int main()
 {
     //DECLARAR VARIAVEIS
-    int fileira, indicePoltrona,
+    int fileira, indicePoltrona, trocar_tipo,
     tipo_passagem = 0, numero_fileiras = 10, numero_poltronas = 6;
-    char continuar, poltrona;
+    char continuar, poltrona, manter_assento;
     char assentos[10][6];
 
     //SETA O IDIOMA PARA O LOCAL
@@ -50,20 +51,23 @@ int main()
 
     while (toupper(continuar) != 'N'){
 
+        bool etapa_fileira = false, etapa_poltrona = false,  etapa_tipo = false;
+
         //LISTA ASSENTOS
         lista_assentos(assentos);
 
-        while (true){
+        while (etapa_fileira == false){
             cout << "Digite a fileira (1-10): ";
             cin >> fileira;
             fileira--;
-            // Valida o campo contra erros e dados inv�lidos.
+
+            // Valida o campo contra erros e dados inválidos.
             if (fileira > 10 || fileira < 0 || std::cin.fail()){
                 verifica_erro();
-            }else break; // Se a entrada for v�lida, saia do loop.
+            }else etapa_fileira = true; // Se a entrada for válida, saia do loop.
         }
 
-        while (true){
+        while (etapa_poltrona == false){
             cout << "Digite a poltrona [A][B][C][D][E][F]: ";
             cin >> poltrona;
             indicePoltrona = toupper(poltrona) - 'A';
@@ -71,10 +75,92 @@ int main()
             if (indicePoltrona < 0 || indicePoltrona > 5 || std::cin.fail())
             {
                 verifica_erro();
-            }else break;  // Se a entrada for válida, saia do loop.
+            }else etapa_poltrona = true;  // Se a entrada for válida, saia do loop.
         }
 
-        assentos[fileira][indicePoltrona] = 'R';
+        // Verifica se o assento já está reservado.
+        if (assentos[fileira][indicePoltrona] == 'R'){
+            cout << "Esse assento já está reservado. Por favor, escolha outro." << endl;
+            continue;
+        }
+        
+        while (etapa_tipo == false) {
+            
+            cout << "Tipo de passagem (1-Executivo, 2-Econômico): ";
+            cin >> tipo_passagem;
+            
+            switch (tipo_passagem){
+            case 1:
+                cout << indicePoltrona << endl;
+                if(indicePoltrona != 0 && indicePoltrona != 5){
+                    cout << "Passagem executiva tem prioridade nos assentos [A] e [F]." << endl;
+                    cout << "Deseja manter o assento? (s/n): ";
+                    cin >> manter_assento;
+
+                    switch (toupper(manter_assento)){
+                    case 'S':
+                        assentos[fileira][indicePoltrona] = 'R';
+                        cout << "Assento reservado com sucesso." << endl;
+                        break;
+                    case 'N':
+                        break;
+                    default:
+                        verifica_erro();
+                        break;
+                    }
+
+                }else{
+                    assentos[fileira][indicePoltrona] = 'R';
+                    cout << "Assento reservado com sucesso." << endl;
+                }
+                
+                etapa_tipo = true;
+                break;
+            case 2:
+                cout << "Tipo de passagem 2-Econômico" << endl;
+                if(indicePoltrona == 0 || indicePoltrona == 5){
+                    cout << "Passagem Econômica não é permitido para os assentos [A] e [F]" << endl;
+                    cout << "Você deseja trocar o tipo de passagem ou Cancelar? (1-Trocar tipo, 2 - Cancelar): ";
+                    cin >> trocar_tipo;
+
+                    switch (trocar_tipo)
+                    {
+                    case 1:
+                        break;
+                    case 2:
+                        etapa_tipo = true;
+                        break;
+                    default:
+                        verifica_erro();
+                        break;
+                    }
+
+                }
+                
+                break;            
+            default:
+                verifica_erro();
+                break;
+            }   
+        }
+
+        cout << "Deseja reservar outra passagem? (s/n):";
+        cin >> continuar;
+
+        switch (toupper(continuar))
+        {
+        case 'S':
+            break;        
+        case 'N':
+            continuar = 'N';
+            lista_assentos(assentos);
+            return 0;        
+        default:
+            verifica_erro();
+            break;
+        }
+
+        
 
     }
 
