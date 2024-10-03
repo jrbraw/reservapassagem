@@ -10,7 +10,7 @@ void verifica_erro()
 {
     cin.clear();  // Limpa o estado de erro de cin
     cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Limpa o buffer de entrada
-    cout << "Op��o inv�lida! Por favor, digite uma op��oo v�lida. \n";
+    cout << "Opçãoo inválida! Por favor, digite uma opção válida. \n";
 }
 
 void lista_assentos(char assentos[10][6]) {
@@ -45,11 +45,14 @@ int main()
         }
     }
 
-    //LISTA ASSENTOS
-    lista_assentos(assentos);
+    
+    
 
-    while (toupper(continuar) != 'N')
-    {
+    while (toupper(continuar) != 'N'){
+
+        //LISTA ASSENTOS
+        lista_assentos(assentos);
+
         while (true){
             cout << "Digite a fileira (1-10): ";
             cin >> fileira;
@@ -60,9 +63,18 @@ int main()
             }else break; // Se a entrada for v�lida, saia do loop.
         }
 
+        while (true){
+            cout << "Digite a poltrona [A][B][C][D][E][F]: ";
+            cin >> poltrona;
+            indicePoltrona = toupper(poltrona) - 'A';
 
+            if (indicePoltrona < 0 || indicePoltrona > 5 || std::cin.fail())
+            {
+                verifica_erro();
+            }else break;  // Se a entrada for válida, saia do loop.
+        }
 
-        
+        assentos[fileira][indicePoltrona] = 'R';
 
     }
 
