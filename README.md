@@ -1,3 +1,9 @@
 # reservapassagem
 
-Sistema de reserva de passagens.
+Um simples sistema de reserva de passagem escrito em C++.
+
+Features:
+- Selecionar Fileira.
+- Selecionar Assento.
+- Selecionar Tipo de passagem.
+
